@@ -49,7 +49,14 @@ footer{text-align:center;color:#60717b;font-size:.8rem;padding:0 18px 24px}
       <div class="field"><label for="length">Länge (m)</label><input id="length" inputmode="decimal" placeholder="z. B. 6,0"></div>
       <div class="field"><label for="weight">Zul. Gesamtgewicht (t)</label><input id="weight" inputmode="decimal" placeholder="z. B. 3,5"></div>
     </div>
-    <p class="small">Diese Angaben werden in dieser Demo nicht an die Navigations-App übermittelt und beeinflussen die Route noch nicht.</p>
+
+<p class="small">
+  Höhe, Breite, Länge und zulässiges Gesamtgewicht können an den Routingdienst
+  übermittelt werden. Die Berücksichtigung hängt von den verfügbaren Straßendaten
+  ab. Eine vollständige Prüfung aller Fahrzeugbeschränkungen ist nicht garantiert.
+  Der Fahrzeugtyp und ein möglicher Anhänger werden derzeit noch nicht vollständig
+  im Routing abgebildet.
+</p>
   </section>
   <section class="card">
     <h2>3. Gefahrgutangaben (für spätere Prüfung)</h2>
@@ -58,7 +65,13 @@ footer{text-align:center;color:#60717b;font-size:.8rem;padding:0 18px 24px}
       <div class="field"><label for="tunnel">Tunnelbeschränkungscode</label><input id="tunnel" placeholder="laut Beförderungspapier"></div>
     </div>
     <label for="notes">Zusätzliche Hinweise (optional)</label><input id="notes" placeholder="z. B. weitere Anforderungen">
-    <p class="small">Gefahrgutklasse, Verpackungsgruppe, Beförderungskategorie und weitere Angaben können je nach Stoff und Beförderungsart entscheidend sein. Bitte nur anhand der maßgeblichen Transportdokumente und Vorschriften bestimmen.</p>
+
+<p class="small">
+  UN-Nummer und Tunnelbeschränkungscode werden derzeit nur erfasst und angezeigt.
+  Sie werden noch nicht für eine ADR-Prüfung oder zur Auswahl einer ADR-konformen
+  Route verwendet. Weitere maßgebliche Angaben müssen anhand der Transportdokumente
+  und geltenden Vorschriften geprüft werden.
+</p>
   </section>
   <section class="card">
     <h2>4. Route an Navigation übergeben</h2>
