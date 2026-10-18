@@ -144,15 +144,21 @@ const weight = readNumber('weight');
       })
     });
 
-    const route = await response.json();
+const route = await response.json();
 
-    if (!response.ok) {
-      throw new Error(route.error || 'Routenberechnung fehlgeschlagen.');
-    }
+if (!response.ok) {
+  throw new Error(
+    'HeiGIT HTTP ' + response.status + ': ' +
+    JSON.stringify(route)
+  );
+}
 
-    if (!route.features || !route.features.length) {
-      throw new Error('Die Routenantwort enthält keine Route.');
-    }
+if (!route.features || !route.features.length) {
+  throw new Error(
+    'HeiGIT lieferte keine Route. Antwort: ' +
+    JSON.stringify(route)
+  );
+}
 
     const coordinates = route.features[0].geometry.coordinates;
     const routePoints = coordinates.map(point => point[1] + ',' + point[0]);
