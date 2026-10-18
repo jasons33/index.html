@@ -188,8 +188,17 @@ const weight = readNumber('weight');
       })
     });
 
-const route = await response.json();
+const responseText = await response.text();
+let route;
 
+try {
+  route = JSON.parse(responseText);
+} catch {
+  throw new Error(
+    'Der Routingdienst antwortet momentan nicht korrekt (HTTP ' +
+    response.status + '). Bitte später erneut versuchen.'
+  );
+}
 if (!response.ok) {
   throw new Error(
     'HeiGIT HTTP ' + response.status + ': ' +
