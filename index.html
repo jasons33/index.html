@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#13283a">
 <title>ADR Route – Prototyp</title>
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
@@ -17,111 +16,31 @@
 }
 * { box-sizing: border-box; }
 body { margin: 0; }
-header {
-  background: #13283a;
-  color: white;
-  padding: 24px 18px 20px;
-}
+header { background: #13283a; color: white; padding: 24px 18px 20px; }
 header h1 { font-size: 1.45rem; margin: 0 0 6px; }
 header p { margin: 0; color: #d7e3eb; font-size: .95rem; }
-main {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: 16px;
-  display: grid;
-  gap: 14px;
-}
-.card {
-  background: white;
-  border: 1px solid #dce4e9;
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0 2px 8px #152b3a0a;
-}
+main { max-width: 720px; margin: 0 auto; padding: 16px; display: grid; gap: 14px; }
+.card { background: white; border: 1px solid #dce4e9; border-radius: 16px; padding: 16px; box-shadow: 0 2px 8px #152b3a0a; }
 h2 { font-size: 1.05rem; margin: 0 0 14px; }
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-label {
-  display: block;
-  font-size: .88rem;
-  font-weight: 650;
-  margin: 0 0 6px;
-}
-input, select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #bac8d2;
-  border-radius: 10px;
-  background: white;
-  font: inherit;
-  min-width: 0;
-}
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+label { display: block; font-size: .88rem; font-weight: 650; margin: 0 0 6px; }
+input, select { width: 100%; padding: 12px; border: 1px solid #bac8d2; border-radius: 10px; background: white; font: inherit; min-width: 0; }
 .field { margin-bottom: 12px; }
 .field:last-child { margin-bottom: 0; }
-button, .button {
-  display: block;
-  width: 100%;
-  border: 0;
-  border-radius: 11px;
-  padding: 14px 16px;
-  font: inherit;
-  font-weight: 700;
-  text-align: center;
-  text-decoration: none;
-  cursor: pointer;
-}
+button, .button { display: block; width: 100%; border: 0; border-radius: 11px; padding: 14px 16px; font: inherit; font-weight: 700; text-align: center; text-decoration: none; cursor: pointer; }
+button:disabled { opacity: .6; cursor: wait; }
 .primary { background: #176b87; color: white; }
-.secondary {
-  background: #e7f0f4;
-  color: #15384a;
-  margin-top: 9px;
-}
-.notice {
-  background: #fff5dd;
-  border: 1px solid #edcf7d;
-  border-radius: 12px;
-  padding: 13px;
-  font-size: .9rem;
-  line-height: 1.45;
-}
-.small {
-  font-size: .83rem;
-  color: #52616b;
-  line-height: 1.45;
-}
-.status {
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 10px;
-  background: #eef3f6;
-  display: none;
-  overflow-wrap: anywhere;
-  white-space: pre-wrap;
-}
-.check {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  font-size: .88rem;
-  line-height: 1.4;
-  margin: 12px 0;
-}
+.secondary { background: #e7f0f4; color: #15384a; margin-top: 9px; }
+.notice { background: #fff5dd; border: 1px solid #edcf7d; border-radius: 12px; padding: 13px; font-size: .9rem; line-height: 1.45; }
+.small { font-size: .83rem; color: #52616b; line-height: 1.45; }
+.status { margin-top: 12px; padding: 12px; border-radius: 10px; background: #eef3f6; display: none; overflow-wrap: anywhere; white-space: pre-wrap; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: .88rem; line-height: 1.4; margin: 12px 0; }
 .check input { width: auto; margin-top: 4px; }
-#map {
-  height: 350px;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #e7edf0;
-}
-footer {
-  text-align: center;
-  color: #60717b;
-  font-size: .8rem;
-  padding: 0 18px 24px;
-}
+#map { height: 350px; border-radius: 12px; overflow: hidden; background: #e7edf0; }
+#startResults, #destResults { display: grid; gap: 6px; margin-top: 7px; }
+.result-button { background: #f0f5f7; border: 1px solid #dce4e9; text-align: left; font-size: .85rem; font-weight: 500; padding: 10px; }
+.result-button.selected { border: 2px solid #176b87; }
+footer { text-align: center; color: #60717b; font-size: .8rem; padding: 0 18px 24px; }
 @media(max-width:440px) {
   .grid { grid-template-columns: 1fr 1fr; gap: 9px; }
   main { padding: 12px; }
@@ -129,7 +48,6 @@ footer {
 }
 </style>
 </head>
-
 <body>
 <header>
   <h1>ADR Route</h1>
@@ -148,15 +66,17 @@ footer {
     <h2>1. Route</h2>
     <div class="field">
       <label for="start">Startadresse</label>
-      <input id="start" autocomplete="street-address"
-        placeholder="z. B. Hannover, Hauptbahnhof">
+      <input id="start" autocomplete="street-address" placeholder="z. B. Dortmund Flughafen">
+      <div id="startResults"></div>
     </div>
     <div class="field">
       <label for="dest">Zieladresse</label>
-      <input id="dest" autocomplete="street-address"
-        placeholder="Straße, Ort, Land">
+      <input id="dest" autocomplete="street-address" placeholder="z. B. Dortmund Hauptbahnhof">
+      <div id="destResults"></div>
     </div>
-    <div class="grid">
+    <button class="secondary" id="findAddresses" type="button">Adressen suchen</button>
+
+    <div class="grid" style="margin-top:14px">
       <div class="field">
         <label for="nav">Navigations-App</label>
         <select id="nav">
@@ -177,45 +97,20 @@ footer {
   <section class="card">
     <h2>2. Fahrzeugprofil</h2>
     <div class="grid">
-      <div class="field">
-        <label for="height">Höhe (m)</label>
-        <input id="height" inputmode="decimal" placeholder="z. B. 2,8">
-      </div>
-      <div class="field">
-        <label for="width">Breite (m)</label>
-        <input id="width" inputmode="decimal" placeholder="z. B. 2,1">
-      </div>
-      <div class="field">
-        <label for="length">Länge (m)</label>
-        <input id="length" inputmode="decimal" placeholder="z. B. 6,0">
-      </div>
-      <div class="field">
-        <label for="weight">Zul. Gesamtgewicht (t)</label>
-        <input id="weight" inputmode="decimal" placeholder="z. B. 3,5">
-      </div>
+      <div class="field"><label for="height">Höhe (m)</label><input id="height" inputmode="decimal" placeholder="z. B. 2,8"></div>
+      <div class="field"><label for="width">Breite (m)</label><input id="width" inputmode="decimal" placeholder="z. B. 2,1"></div>
+      <div class="field"><label for="length">Länge (m)</label><input id="length" inputmode="decimal" placeholder="z. B. 6,0"></div>
+      <div class="field"><label for="weight">Zul. Gesamtgewicht (t)</label><input id="weight" inputmode="decimal" placeholder="z. B. 3,5"></div>
     </div>
-    <p class="small">
-      Fahrzeugmaße und Gewicht können an den Routingdienst übermittelt werden.
-      Die Berücksichtigung hängt von den verfügbaren Straßendaten ab.
-      Fahrzeugtyp und Anhänger werden noch nicht vollständig im Routing abgebildet.
-    </p>
+    <p class="small">Fahrzeugmaße und Gewicht können an den Routingdienst übermittelt werden. Die Berücksichtigung hängt von den verfügbaren Straßendaten ab. Fahrzeugtyp und Anhänger werden noch nicht vollständig im Routing abgebildet.</p>
   </section>
 
   <section class="card">
     <h2>3. Gefahrgutangaben</h2>
     <div class="grid">
-      <div class="field">
-        <label for="un">UN-Nummer</label>
-        <input id="un" placeholder="z. B. UN 1203">
-      </div>
-      <div class="field">
-        <label for="tunnel">Tunnelbeschränkungscode</label>
-        <input id="tunnel" placeholder="z. B. (D/E)">
-      </div>
-      <div class="field">
-        <label for="hazardClass">Gefahrgutklasse</label>
-        <input id="hazardClass" placeholder="Laut Transportpapieren">
-      </div>
+      <div class="field"><label for="un">UN-Nummer</label><input id="un" placeholder="z. B. UN 1203"></div>
+      <div class="field"><label for="tunnel">Tunnelbeschränkungscode</label><input id="tunnel" placeholder="z. B. (D/E)"></div>
+      <div class="field"><label for="hazardClass">Gefahrgutklasse</label><input id="hazardClass" placeholder="Laut Transportpapieren"></div>
       <div class="field">
         <label for="packingGroup">Verpackungsgruppe</label>
         <select id="packingGroup">
@@ -239,19 +134,12 @@ footer {
         </select>
       </div>
     </div>
-    <p class="small">
-      Diese Angaben werden aktuell nur erfasst und angezeigt.
-      Sie werden noch nicht zur Auswahl einer ADR-konformen Route verwendet.
-      Die erforderlichen Angaben und Vorschriften müssen unabhängig geprüft werden.
-    </p>
+    <p class="small">Diese Angaben werden aktuell nur erfasst und angezeigt. Sie werden nicht zur Auswahl einer ADR-konformen Route verwendet. Vorschriften müssen unabhängig geprüft werden.</p>
   </section>
 
   <section class="card">
     <h2>4. Berechnete Route</h2>
-    <p class="small">
-      Die Linie zeigt die vom Routingdienst berechnete Strecke.
-      Sie ist nicht als ADR-konform bestätigt.
-    </p>
+    <p class="small">Die Linie zeigt die vom Routingdienst berechnete Strecke. Sie ist nicht als ADR-konform bestätigt.</p>
     <div id="map" aria-label="Karte mit berechneter Route"></div>
   </section>
 
@@ -259,17 +147,12 @@ footer {
     <h2>5. Route berechnen und Navigation öffnen</h2>
     <label class="check">
       <input type="checkbox" id="ack">
-      Ich habe verstanden, dass dieser Prototyp keine Gefahrgutroute validiert
-      und ich die Strecke vor Fahrtantritt unabhängig prüfen muss.
+      Ich habe verstanden, dass dieser Prototyp keine Gefahrgutroute validiert und ich die Strecke vor Fahrtantritt unabhängig prüfen muss.
     </label>
     <button class="primary" id="go">Route berechnen</button>
-    <button class="secondary" id="save">
-      Fahrzeug-/Gefahrgutprofil als Text anzeigen
-    </button>
+    <button class="secondary" id="save">Fahrzeug-/Gefahrgutprofil als Text anzeigen</button>
     <div id="status" class="status" role="status" aria-live="polite"></div>
-    <button class="secondary" id="openNav" hidden>
-      In ausgewählter Navigations-App öffnen
-    </button>
+    <button class="secondary" id="openNav" hidden>In ausgewählter Navigations-App öffnen</button>
   </section>
 
   <section class="small">
@@ -278,21 +161,25 @@ footer {
   </section>
 </main>
 
-<footer>
-  Prototyp mit Routingdienst · Adress- und Routenanfragen werden extern verarbeitet
-</footer>
+<footer>Prototyp mit Routingdienst · Adress- und Routenanfragen werden extern verarbeitet</footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const $ = id => document.getElementById(id);
+const worker = 'https://adr-route-proxy.jasonstreckenbach5.workers.dev';
 
-function show(msg) {
+let startChoice = null;
+let destChoice = null;
+let routeLine = null;
+let lastStart = '';
+let lastDestination = '';
+
+function show(message) {
   const status = $('status');
   status.style.display = 'block';
-  status.textContent = msg;
+  status.textContent = message;
 }
 
-// Karte initialisieren, nachdem Leaflet geladen wurde.
 const map = L.map('map').setView([51.1657, 10.4515], 6);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -300,80 +187,176 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19
 }).addTo(map);
 
-let routeLine = null;
-let lastStart = '';
-let lastDestination = '';
+function clearChoices(which) {
+  if (which === 'start') {
+    startChoice = null;
+    $('startResults').replaceChildren();
+  } else {
+    destChoice = null;
+    $('destResults').replaceChildren();
+  }
+}
 
-$('go').addEventListener('click', async () => {
+$('start').addEventListener('input', () => clearChoices('start'));
+$('dest').addEventListener('input', () => clearChoices('dest'));
+
+async function searchAddress(address) {
+  const text = address.trim();
+  if (text.length < 3) throw new Error('Bitte mindestens drei Zeichen eingeben.');
+
+  const hasCountry = /\b(deutschland|germany|niederlande|netherlands|frankreich|france|belgien|belgium|österreich|austria|polen|poland|schweiz|switzerland|tschechien|czechia|dänemark|denmark|luxemburg|luxembourg|italien|italy|spanien|spain)\b/i.test(text);
+  const query = hasCountry ? text : text + ', Deutschland';
+
+  const response = await fetch(worker + '/geocode?text=' + encodeURIComponent(query));
+  const raw = await response.text();
+
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    throw new Error('Die Adresssuche hat ungültige Daten geliefert.');
+  }
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Adresssuche fehlgeschlagen.');
+  }
+
+  if (!Array.isArray(data.features) || !data.features.length) {
+    throw new Error('Keine passenden Adressen gefunden: ' + query);
+  }
+
+  return data.features.filter(item =>
+    item &&
+    typeof item.label === 'string' &&
+    Array.isArray(item.coordinates) &&
+    item.coordinates.length === 2 &&
+    item.coordinates.every(Number.isFinite)
+  );
+}
+
+function renderChoices(features, target, which) {
+  const container = $(target);
+  container.replaceChildren();
+
+  if (!features.length) {
+    show('Keine gültigen Adressvorschläge gefunden.');
+    return;
+  }
+
+  features.forEach((feature, index) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'result-button';
+    button.textContent = feature.label || ('Treffer ' + (index + 1));
+
+    button.addEventListener('click', () => {
+      if (which === 'start') {
+        startChoice = feature;
+        $('start').value = feature.label;
+      } else {
+        destChoice = feature;
+        $('dest').value = feature.label;
+      }
+
+      [...container.querySelectorAll('button')].forEach(item => {
+        item.classList.remove('selected');
+      });
+      button.classList.add('selected');
+
+      show('Adresse ausgewählt: ' + feature.label);
+    });
+
+    container.appendChild(button);
+  });
+}
+
+$('findAddresses').addEventListener('click', async () => {
   const start = $('start').value.trim();
   const dest = $('dest').value.trim();
 
   if (!start || !dest) {
-    show('Bitte Start- und Zieladresse eingeben.');
+    show('Bitte Start und Ziel eingeben.');
     return;
   }
 
+  $('findAddresses').disabled = true;
+  $('findAddresses').textContent = 'Suche Adressen …';
+
+  try {
+    show('Suche mögliche Startadressen …');
+    const starts = await searchAddress(start);
+    renderChoices(starts, 'startResults', 'start');
+
+    show('Suche mögliche Zieladressen …');
+    const destinations = await searchAddress(dest);
+    renderChoices(destinations, 'destResults', 'dest');
+
+    show('Bitte wähle jeweils den richtigen Start- und Zieltreffer aus.');
+  } catch (error) {
+    show('Fehler bei der Adresssuche: ' + error.message);
+  } finally {
+    $('findAddresses').disabled = false;
+    $('findAddresses').textContent = 'Adressen suchen';
+  }
+});
+
+function distanceKm(a, b) {
+  const toRad = degrees => degrees * Math.PI / 180;
+  const [lon1, lat1] = a;
+  const [lon2, lat2] = b;
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const h =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) ** 2;
+  return 6371 * 2 * Math.asin(Math.min(1, Math.sqrt(h)));
+}
+
+function readNumber(id) {
+  const value = $(id).value.trim().replace(',', '.');
+  return value === '' ? NaN : Number(value);
+}
+
+$('go').addEventListener('click', async () => {
   if (!$('ack').checked) {
     show('Bitte zuerst den Sicherheitshinweis bestätigen.');
     return;
   }
 
-  const worker = 'https://adr-route-proxy.jasonstreckenbach5.workers.dev';
+  if (!startChoice || !destChoice) {
+    show('Bitte klicke zuerst auf „Adressen suchen“ und wähle einen passenden Start- und Zieltreffer aus.');
+    return;
+  }
+
+  const startCoordinates = startChoice.coordinates;
+  const destCoordinates = destChoice.coordinates;
+  const straightDistance = distanceKm(startCoordinates, destCoordinates);
+
+  if (!Number.isFinite(straightDistance) || straightDistance > 1500) {
+    show(
+      'Start und Ziel liegen laut Adresssuche etwa ' +
+      Math.round(straightDistance) +
+      ' km auseinander. Das ist für diese Eingabe ungewöhnlich. ' +
+      'Bitte prüfe die ausgewählten Adressen.'
+    );
+    return;
+  }
+
   $('go').disabled = true;
   $('go').textContent = 'Route wird berechnet …';
   $('openNav').hidden = true;
 
   try {
-    show('Suche Start- und Zieladresse …');
-
-    async function geocode(address) {
-      const response = await fetch(
-        worker + '/geocode?text=' + encodeURIComponent(address)
-      );
-
-      const responseText = await response.text();
-      let data;
-
-      try {
-        data = JSON.parse(responseText);
-      } catch {
-        throw new Error(
-          'Die Adresssuche antwortet momentan nicht korrekt. Bitte später erneut versuchen.'
-        );
-      }
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Adresssuche fehlgeschlagen.');
-      }
-
-      if (!data.features || data.features.length === 0) {
-        throw new Error('Adresse nicht gefunden: ' + address);
-      }
-
-      return data.features[0].coordinates;
-    }
-
-    const startCoordinates = await geocode(start);
-    const destCoordinates = await geocode(dest);
-
     show('Berechne Route …');
 
     const restrictions = {};
-
-    const readNumber = id => {
-      const value = $(id).value.trim().replace(',', '.');
-      return value === '' ? NaN : Number(value);
-    };
-
-    const height = readNumber('height');
-    const width = readNumber('width');
-    const length = readNumber('length');
-    const weight = readNumber('weight');
-
-    if (Number.isFinite(height) && height > 0) restrictions.height = height;
-    if (Number.isFinite(width) && width > 0) restrictions.width = width;
-    if (Number.isFinite(length) && length > 0) restrictions.length = length;
-    if (Number.isFinite(weight) && weight > 0) restrictions.weight = weight;
+    for (const id of ['height', 'width', 'length', 'weight']) {
+      const value = readNumber(id);
+      if (Number.isFinite(value) && value > 0) {
+        restrictions[id] = value;
+      }
+    }
 
     const response = await fetch(worker + '/route', {
       method: 'POST',
@@ -381,51 +364,34 @@ $('go').addEventListener('click', async () => {
       body: JSON.stringify({
         coordinates: [startCoordinates, destCoordinates],
         options: {
-          profile_params: {
-            restrictions: restrictions
-          }
+          profile_params: { restrictions }
         }
       })
     });
 
-    const responseText = await response.text();
+    const raw = await response.text();
     let route;
 
     try {
-      route = JSON.parse(responseText);
+      route = JSON.parse(raw);
     } catch {
-      throw new Error(
-        'Der Routingdienst antwortet momentan nicht korrekt (HTTP ' +
-        response.status + '). Bitte später erneut versuchen.'
-      );
+      throw new Error('Routingdienst lieferte ungültige Daten (HTTP ' + response.status + ').');
     }
 
     if (!response.ok) {
-      throw new Error(
-        'HeiGIT HTTP ' + response.status + ': ' +
-        JSON.stringify(route)
-      );
+      const detail = route?.error?.message || route?.error || JSON.stringify(route);
+      throw new Error('HeiGIT HTTP ' + response.status + ': ' + detail);
     }
 
-    if (!route.features || !route.features.length ||
-        !route.features[0].geometry ||
-        !route.features[0].geometry.coordinates) {
+    const coordinates = route.features?.[0]?.geometry?.coordinates;
+
+    if (!Array.isArray(coordinates) || !coordinates.length) {
       throw new Error('Der Routingdienst hat keine gültige Route geliefert.');
     }
 
-    const coordinates = route.features[0].geometry.coordinates;
-
-    if (!coordinates.length) {
-      throw new Error('Die Route enthält keine Koordinaten.');
-    }
-
-    // Vorherige Route entfernen und neue Route auf der Karte zeichnen.
-    if (routeLine) {
-      map.removeLayer(routeLine);
-    }
+    if (routeLine) map.removeLayer(routeLine);
 
     const latLngs = coordinates.map(point => [point[1], point[0]]);
-
     routeLine = L.polyline(latLngs, {
       color: '#176b87',
       weight: 5
@@ -433,18 +399,20 @@ $('go').addEventListener('click', async () => {
 
     map.fitBounds(routeLine.getBounds(), { padding: [20, 20] });
 
-    lastStart = start;
-    lastDestination = dest;
+    lastStart = startChoice.label;
+    lastDestination = destChoice.label;
+
+    const summary = route.features[0].properties?.summary;
+    const distanceText = summary?.distance
+      ? '\nRoutenlänge: ' + (summary.distance / 1000).toFixed(1) + ' km'
+      : '';
 
     show(
-      'Route auf der Karte eingezeichnet. Bitte prüfe die Strecke unabhängig. ' +
-      'Diese Berechnung bestätigt keine ADR-Konformität. ' +
-      'Die externe Navigations-App kann eine andere Strecke berechnen.'
+      'Route auf der Karte eingezeichnet.' + distanceText +
+      '\nBitte prüfe die Strecke unabhängig. Die Route ist nicht als ADR-konform bestätigt.'
     );
 
-    // Navigation erst nach der Routenberechnung separat öffnen.
     $('openNav').hidden = false;
-
   } catch (error) {
     show('Fehler: ' + error.message);
   } finally {
@@ -459,17 +427,14 @@ $('openNav').addEventListener('click', () => {
     return;
   }
 
-  const mapsUrl = $('nav').value === 'apple'
-    ? 'https://maps.apple.com/?saddr=' +
-      encodeURIComponent(lastStart) +
-      '&daddr=' + encodeURIComponent(lastDestination) +
-      '&dirflg=d'
+  const url = $('nav').value === 'apple'
+    ? 'https://maps.apple.com/?saddr=' + encodeURIComponent(lastStart) +
+      '&daddr=' + encodeURIComponent(lastDestination) + '&dirflg=d'
     : 'https://www.google.com/maps/dir/?api=1&origin=' +
-      encodeURIComponent(lastStart) +
-      '&destination=' + encodeURIComponent(lastDestination) +
-      '&travelmode=driving';
+      encodeURIComponent(lastStart) + '&destination=' +
+      encodeURIComponent(lastDestination) + '&travelmode=driving';
 
-  window.open(mapsUrl, '_blank', 'noopener');
+  window.open(url, '_blank', 'noopener');
 });
 
 $('save').addEventListener('click', () => {
@@ -485,9 +450,8 @@ $('save').addEventListener('click', () => {
     'Verpackungsgruppe: ' + ($('packingGroup').value || 'nicht angegeben'),
     'Beförderungskategorie: ' + ($('transportCategory').value || 'nicht angegeben'),
     '',
-    'HINWEIS: Keine ADR- oder Routenprüfung durchgeführt.'
+    'HINWEIS: Keine ADR- oder Sicherheitsprüfung durchgeführt.'
   ];
-
   show(lines.join('\n'));
 });
 </script>
