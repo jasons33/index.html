@@ -73,19 +73,104 @@ footer{text-align:center;color:#60717b;font-size:.8rem;padding:0 18px 24px}
 <script>
 const $=id=>document.getElementById(id);
 function show(msg){const s=$('status');s.style.display='block';s.textContent=msg}
-$('go').addEventListener('click',()=>{
- const start=$('start').value.trim(), dest=$('dest').value.trim();
- if(!start||!dest){show('Bitte Start- und Zieladresse eingeben.');return}
- if(!$('ack').checked){show('Bitte zuerst den Sicherheitshinweis bestätigen.');return}
- let url;
- if($('nav').value==='apple'){
-   url='https://maps.apple.com/?saddr='+encodeURIComponent(start)+'&daddr='+encodeURIComponent(dest)+'&dirflg=d';
- }else{
-   url='https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(start)+'&destination='+encodeURIComponent(dest)+'&travelmode=driving';
- }
- show('Es wird eine normale Route an die gewählte App übergeben. Fahrzeugmaße und Gefahrgutdaten werden nicht übertragen oder berücksichtigt. Öffne die Route nur nach unabhängiger Prüfung.');
- window.open(url,'_blank','noopener');
+
+$('go').addEventListener('click', async () => {
+  const start = $('start').value.trim();
+  const dest = $('dest').value.trim();
+
+  if (!start || !dest) {
+    show('Bitte Start- und Zieladresse eingeben.');
+    return;
+  }
+
+  if (!$('ack').checked) {
+    show('Bitte zuerst den Sicherheitshinweis bestätigen.');
+    return;
+  }
+
+  const worker = 'https://adr-route-proxy.jasonstreckenbach5.workers.dev';
+
+  try {
+    show('Suche Start- und Zieladresse …');
+
+    async function geocode(address) {
+      const response = await fetch(
+        worker + '/geocode?text=' + encodeURIComponent(address)
+      );
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Adresssuche fehlgeschlagen.');
+      }
+
+      if (!data.features || data.features.length === 0) {
+        throw new Error('Adresse nicht gefunden: ' + address);
+      }
+
+      return data.features[0].coordinates;
+    }
+
+    const startCoordinates = await geocode(start);
+    const destCoordinates = await geocode(dest);
+
+    show('Berechne Route …');
+
+    const restrictions = {};
+    const height = parseFloat($('height').value);
+    const width = parseFloat($('width').value);
+    const length = parseFloat($('length').value);
+    const weight = parseFloat($('weight').value);
+
+    if (Number.isFinite(height) && height > 0) restrictions.height = height;
+    if (Number.isFinite(width) && width > 0) restrictions.width = width;
+    if (Number.isFinite(length) && length > 0) restrictions.length = length;
+    if (Number.isFinite(weight) && weight > 0) restrictions.weight = weight;
+
+    const response = await fetch(worker + '/route', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        coordinates: [startCoordinates, destCoordinates],
+        options: {
+          profile_params: {
+            restrictions: restrictions
+          }
+        }
+      })
+    });
+
+    const route = await response.json();
+
+    if (!response.ok) {
+      throw new Error(route.error || 'Routenberechnung fehlgeschlagen.');
+    }
+
+    if (!route.features || !route.features.length) {
+      throw new Error('Die Routenantwort enthält keine Route.');
+    }
+
+    const coordinates = route.features[0].geometry.coordinates;
+    const routePoints = coordinates.map(point => point[1] + ',' + point[0]);
+
+    const mapsUrl = $('nav').value === 'apple'
+      ? 'https://maps.apple.com/?daddr=' +
+        encodeURIComponent(dest) + '&dirflg=d'
+      : 'https://www.google.com/maps/dir/?api=1&origin=' +
+        encodeURIComponent(start) + '&destination=' +
+        encodeURIComponent(dest) + '&travelmode=driving';
+
+    show(
+      'Routenvorschlag berechnet. Die Strecke ist nicht als ADR-konform bestätigt. ' +
+      'Bitte Gefahrgut-, Tunnel- und Fahrzeugbeschränkungen unabhängig prüfen. ' +
+      'Die berechnete Strecke wird als Übersicht geöffnet.'
+    );
+
+    window.open(mapsUrl, '_blank', 'noopener');
+  } catch (error) {
+    show('Fehler: ' + error.message);
+  }
 });
+
 $('save').addEventListener('click',()=>{
  const lines=[
  'Fahrzeug: '+$('vehicle').value,
