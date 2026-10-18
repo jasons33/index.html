@@ -116,10 +116,15 @@ $('go').addEventListener('click', async () => {
     show('Berechne Route …');
 
     const restrictions = {};
-    const height = parseFloat($('height').value);
-    const width = parseFloat($('width').value);
-    const length = parseFloat($('length').value);
-    const weight = parseFloat($('weight').value);
+const readNumber = id => {
+  const value = $(id).value.trim().replace(',', '.');
+  return value === '' ? NaN : Number(value);
+};
+
+const height = readNumber('height');
+const width = readNumber('width');
+const length = readNumber('length');
+const weight = readNumber('weight');
 
     if (Number.isFinite(height) && height > 0) restrictions.height = height;
     if (Number.isFinite(width) && width > 0) restrictions.width = width;
