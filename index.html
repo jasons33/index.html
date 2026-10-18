@@ -60,11 +60,43 @@ footer{text-align:center;color:#60717b;font-size:.8rem;padding:0 18px 24px}
   </section>
   <section class="card">
     <h2>3. Gefahrgutangaben (für spätere Prüfung)</h2>
-    <div class="grid">
-      <div class="field"><label for="un">UN-Nummer</label><input id="un" placeholder="z. B. UN 1203"></div>
-      <div class="field"><label for="tunnel">Tunnelbeschränkungscode</label><input id="tunnel" placeholder="laut Beförderungspapier"></div>
-    </div>
-    <label for="notes">Zusätzliche Hinweise (optional)</label><input id="notes" placeholder="z. B. weitere Anforderungen">
+   
+<div class="grid">
+  <div class="field">
+    <label for="un">UN-Nummer</label>
+    <input id="un" placeholder="z. B. UN 1203">
+  </div>
+  <div class="field">
+    <label for="tunnel">Tunnelbeschränkungscode</label>
+    <input id="tunnel" placeholder="z. B. (D/E)">
+  </div>
+  <div class="field">
+    <label for="hazardClass">Gefahrgutklasse</label>
+    <input id="hazardClass" placeholder="laut Transportpapieren">
+  </div>
+  <div class="field">
+    <label for="packingGroup">Verpackungsgruppe</label>
+    <select id="packingGroup">
+      <option value="">Bitte auswählen</option>
+      <option value="I">I – hohe Gefahr</option>
+      <option value="II">II – mittlere Gefahr</option>
+      <option value="III">III – geringe Gefahr</option>
+      <option value="Keine/ nicht anwendbar">Keine / nicht anwendbar</option>
+    </select>
+  </div>
+  <div class="field">
+    <label for="transportCategory">Beförderungskategorie</label>
+    <select id="transportCategory">
+      <option value="">Bitte auswählen</option>
+      <option value="0">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="Nicht bekannt">Nicht bekannt</option>
+    </select>
+  </div>
+</div>
 
 <p class="small">
   UN-Nummer und Tunnelbeschränkungscode werden derzeit nur erfasst und angezeigt.
