@@ -1,135 +1,308 @@
+
 <!doctype html>
 <html lang="de">
-  
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#13283a">
 <title>ADR Route – Prototyp</title>
-<style>
-:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#17212b;background:#f2f5f7}
-*{box-sizing:border-box}body{margin:0}header{background:#13283a;color:white;padding:24px 18px 20px}
-header h1{font-size:1.45rem;margin:0 0 6px}header p{margin:0;color:#d7e3eb;font-size:.95rem}
-main{max-width:720px;margin:0 auto;padding:16px;display:grid;gap:14px}
-.card{background:white;border:1px solid #dce4e9;border-radius:16px;padding:16px;box-shadow:0 2px 8px #152b3a0a}
-h2{font-size:1.05rem;margin:0 0 14px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-label{display:block;font-size:.88rem;font-weight:650;margin:0 0 6px}
-input,select{width:100%;padding:12px;border:1px solid #bac8d2;border-radius:10px;background:white;font:inherit;min-width:0}
-.field{margin-bottom:12px}.field:last-child{margin-bottom:0}
-button,.button{display:block;width:100%;border:0;border-radius:11px;padding:14px 16px;font:inherit;font-weight:700;text-align:center;text-decoration:none;cursor:pointer}
-.primary{background:#176b87;color:white}.secondary{background:#e7f0f4;color:#15384a;margin-top:9px}
-.notice{background:#fff5dd;border:1px solid #edcf7d;border-radius:12px;padding:13px;font-size:.9rem;line-height:1.45}
-.small{font-size:.83rem;color:#52616b;line-height:1.45}
-.status{margin-top:12px;padding:12px;border-radius:10px;background:#eef3f6;display:none;overflow-wrap:anywhere}
-.check{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;line-height:1.4;margin:12px 0}.check input{width:auto;margin-top:4px}
-footer{text-align:center;color:#60717b;font-size:.8rem;padding:0 18px 24px}
-@media(max-width:440px){.grid{grid-template-columns:1fr 1fr;gap:9px}main{padding:12px}.card{padding:14px}}
-</style>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<style>
+:root {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #17212b;
+  background: #f2f5f7;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+header {
+  background: #13283a;
+  color: white;
+  padding: 24px 18px 20px;
+}
+header h1 { font-size: 1.45rem; margin: 0 0 6px; }
+header p { margin: 0; color: #d7e3eb; font-size: .95rem; }
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+}
+.card {
+  background: white;
+  border: 1px solid #dce4e9;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 8px #152b3a0a;
+}
+h2 { font-size: 1.05rem; margin: 0 0 14px; }
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+label {
+  display: block;
+  font-size: .88rem;
+  font-weight: 650;
+  margin: 0 0 6px;
+}
+input, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #bac8d2;
+  border-radius: 10px;
+  background: white;
+  font: inherit;
+  min-width: 0;
+}
+.field { margin-bottom: 12px; }
+.field:last-child { margin-bottom: 0; }
+button, .button {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: 11px;
+  padding: 14px 16px;
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+.primary { background: #176b87; color: white; }
+.secondary {
+  background: #e7f0f4;
+  color: #15384a;
+  margin-top: 9px;
+}
+.notice {
+  background: #fff5dd;
+  border: 1px solid #edcf7d;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: .9rem;
+  line-height: 1.45;
+}
+.small {
+  font-size: .83rem;
+  color: #52616b;
+  line-height: 1.45;
+}
+.status {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #eef3f6;
+  display: none;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: .88rem;
+  line-height: 1.4;
+  margin: 12px 0;
+}
+.check input { width: auto; margin-top: 4px; }
+#map {
+  height: 350px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #e7edf0;
+}
+footer {
+  text-align: center;
+  color: #60717b;
+  font-size: .8rem;
+  padding: 0 18px 24px;
+}
+@media(max-width:440px) {
+  .grid { grid-template-columns: 1fr 1fr; gap: 9px; }
+  main { padding: 12px; }
+  .card { padding: 14px; }
+}
+</style>
 </head>
+
 <body>
 <header>
   <h1>ADR Route</h1>
-  <p>Mobiler Konzept-Prototyp · iPhone & Android</p>
+  <p>Mobiler Konzept-Prototyp · iPhone &amp; Android</p>
 </header>
+
 <main>
-  <section class="notice"><strong>Wichtiger Sicherheitshinweis:</strong> Dieser Prototyp prüft keine ADR-Tunnelcodes, Gefahrgutverbote, Fahrzeugbeschränkungen oder Straßendaten. Er erstellt nur einen Link zu einer externen Navigations-App. Eine angezeigte Route ist <strong>nicht als ADR-konform oder sicher bestätigt</strong>.</section>
+  <section class="notice">
+    <strong>Wichtiger Sicherheitshinweis:</strong>
+    Dieser Prototyp prüft keine ADR-Tunnelcodes, Gefahrgutverbote,
+    Fahrzeugbeschränkungen oder Straßendaten vollständig.
+    Eine angezeigte Route ist <strong>nicht als ADR-konform oder sicher bestätigt</strong>.
+  </section>
+
   <section class="card">
     <h2>1. Route</h2>
-    <div class="field"><label for="start">Startadresse</label><input id="start" autocomplete="street-address" placeholder="z. B. Hannover, Hauptbahnhof"></div>
-    <div class="field"><label for="dest">Zieladresse</label><input id="dest" autocomplete="street-address" placeholder="Straße, Ort, Land"></div>
+    <div class="field">
+      <label for="start">Startadresse</label>
+      <input id="start" autocomplete="street-address"
+        placeholder="z. B. Hannover, Hauptbahnhof">
+    </div>
+    <div class="field">
+      <label for="dest">Zieladresse</label>
+      <input id="dest" autocomplete="street-address"
+        placeholder="Straße, Ort, Land">
+    </div>
     <div class="grid">
-      <div class="field"><label for="nav">Navigations-App</label><select id="nav"><option value="google">Google Maps</option><option value="apple">Apple Karten (iPhone)</option></select></div>
-      <div class="field"><label for="vehicle">Fahrzeugtyp</label><select id="vehicle"><option>Transporter</option><option>Transporter mit Anhänger</option></select></div>
+      <div class="field">
+        <label for="nav">Navigations-App</label>
+        <select id="nav">
+          <option value="google">Google Maps</option>
+          <option value="apple">Apple Karten (iPhone)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="vehicle">Fahrzeugtyp</label>
+        <select id="vehicle">
+          <option>Transporter</option>
+          <option>Transporter mit Anhänger</option>
+        </select>
+      </div>
     </div>
   </section>
+
   <section class="card">
-    <h2>2. Fahrzeugprofil (für spätere Prüfung)</h2>
+    <h2>2. Fahrzeugprofil</h2>
     <div class="grid">
-      <div class="field"><label for="height">Höhe (m)</label><input id="height" inputmode="decimal" placeholder="z. B. 2,8"></div>
-      <div class="field"><label for="width">Breite (m)</label><input id="width" inputmode="decimal" placeholder="z. B. 2,1"></div>
-      <div class="field"><label for="length">Länge (m)</label><input id="length" inputmode="decimal" placeholder="z. B. 6,0"></div>
-      <div class="field"><label for="weight">Zul. Gesamtgewicht (t)</label><input id="weight" inputmode="decimal" placeholder="z. B. 3,5"></div>
+      <div class="field">
+        <label for="height">Höhe (m)</label>
+        <input id="height" inputmode="decimal" placeholder="z. B. 2,8">
+      </div>
+      <div class="field">
+        <label for="width">Breite (m)</label>
+        <input id="width" inputmode="decimal" placeholder="z. B. 2,1">
+      </div>
+      <div class="field">
+        <label for="length">Länge (m)</label>
+        <input id="length" inputmode="decimal" placeholder="z. B. 6,0">
+      </div>
+      <div class="field">
+        <label for="weight">Zul. Gesamtgewicht (t)</label>
+        <input id="weight" inputmode="decimal" placeholder="z. B. 3,5">
+      </div>
     </div>
-
-<p class="small">
-  Höhe, Breite, Länge und zulässiges Gesamtgewicht können an den Routingdienst
-  übermittelt werden. Die Berücksichtigung hängt von den verfügbaren Straßendaten
-  ab. Eine vollständige Prüfung aller Fahrzeugbeschränkungen ist nicht garantiert.
-  Der Fahrzeugtyp und ein möglicher Anhänger werden derzeit noch nicht vollständig
-  im Routing abgebildet.
-</p>
+    <p class="small">
+      Fahrzeugmaße und Gewicht können an den Routingdienst übermittelt werden.
+      Die Berücksichtigung hängt von den verfügbaren Straßendaten ab.
+      Fahrzeugtyp und Anhänger werden noch nicht vollständig im Routing abgebildet.
+    </p>
   </section>
-  <section class="card">
-    <h2>3. Gefahrgutangaben (für spätere Prüfung)</h2>
-   
-<div class="grid">
-  <div class="field">
-    <label for="un">UN-Nummer</label>
-    <input id="un" placeholder="z. B. UN 1203">
-  </div>
-  <div class="field">
-    <label for="tunnel">Tunnelbeschränkungscode</label>
-    <input id="tunnel" placeholder="z. B. (D/E)">
-  </div>
-  <div class="field">
-    <label for="hazardClass">Gefahrgutklasse</label>
-    <input id="hazardClass" placeholder="laut Transportpapieren">
-  </div>
-  <div class="field">
-    <label for="packingGroup">Verpackungsgruppe</label>
-    <select id="packingGroup">
-      <option value="">Bitte auswählen</option>
-      <option value="I">I – hohe Gefahr</option>
-      <option value="II">II – mittlere Gefahr</option>
-      <option value="III">III – geringe Gefahr</option>
-      <option value="Keine/ nicht anwendbar">Keine / nicht anwendbar</option>
-    </select>
-  </div>
-  <div class="field">
-    <label for="transportCategory">Beförderungskategorie</label>
-    <select id="transportCategory">
-      <option value="">Bitte auswählen</option>
-      <option value="0">0</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="Nicht bekannt">Nicht bekannt</option>
-    </select>
-  </div>
-</div>
-
-<p class="small">
-  UN-Nummer und Tunnelbeschränkungscode werden derzeit nur erfasst und angezeigt.
-  Sie werden noch nicht für eine ADR-Prüfung oder zur Auswahl einer ADR-konformen
-  Route verwendet. Weitere maßgebliche Angaben müssen anhand der Transportdokumente
-  und geltenden Vorschriften geprüft werden.
-</p>
-  </section>
-  
-<section class="card">
-  <h2>Berechnete Route</h2>
-  <p class="small">
-    Die dargestellte Strecke stammt vom Routingdienst.
-    Sie ist nicht als ADR-konform bestätigt.
-  </p>
-  <div id="map" style="height: 350px; border-radius: 12px; overflow: hidden;"></div>
-</section>
 
   <section class="card">
-    <h2>4. Route an Navigation übergeben</h2>
-    <label class="check"><input type="checkbox" id="ack"> Ich habe verstanden, dass dieser Prototyp keine Gefahrgutroute validiert und ich die Strecke vor Fahrtantritt unabhängig prüfen muss.</label>
-    <button class="primary" id="go">Navigations-App öffnen</button>
-    <button class="secondary" id="save">Fahrzeug-/Gefahrgutprofil als Text anzeigen</button>
-    <div id="status" class="status" role="status"></div>
+    <h2>3. Gefahrgutangaben</h2>
+    <div class="grid">
+      <div class="field">
+        <label for="un">UN-Nummer</label>
+        <input id="un" placeholder="z. B. UN 1203">
+      </div>
+      <div class="field">
+        <label for="tunnel">Tunnelbeschränkungscode</label>
+        <input id="tunnel" placeholder="z. B. (D/E)">
+      </div>
+      <div class="field">
+        <label for="hazardClass">Gefahrgutklasse</label>
+        <input id="hazardClass" placeholder="Laut Transportpapieren">
+      </div>
+      <div class="field">
+        <label for="packingGroup">Verpackungsgruppe</label>
+        <select id="packingGroup">
+          <option value="">Bitte auswählen</option>
+          <option value="I">I – hohe Gefahr</option>
+          <option value="II">II – mittlere Gefahr</option>
+          <option value="III">III – geringe Gefahr</option>
+          <option value="Keine / nicht anwendbar">Keine / nicht anwendbar</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="transportCategory">Beförderungskategorie</label>
+        <select id="transportCategory">
+          <option value="">Bitte auswählen</option>
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="Nicht bekannt">Nicht bekannt</option>
+        </select>
+      </div>
+    </div>
+    <p class="small">
+      Diese Angaben werden aktuell nur erfasst und angezeigt.
+      Sie werden noch nicht zur Auswahl einer ADR-konformen Route verwendet.
+      Die erforderlichen Angaben und Vorschriften müssen unabhängig geprüft werden.
+    </p>
   </section>
-  <section class="small">Nächster Entwicklungsschritt: geeignete Routing- und Verkehrsdaten auswählen, Datenqualität und Abdeckung pro Land prüfen und ADR-/Tunnelregeln fachlich verifizieren, bevor daraus irgendeine Sicherheitsfreigabe abgeleitet wird.</section>
+
+  <section class="card">
+    <h2>4. Berechnete Route</h2>
+    <p class="small">
+      Die Linie zeigt die vom Routingdienst berechnete Strecke.
+      Sie ist nicht als ADR-konform bestätigt.
+    </p>
+    <div id="map" aria-label="Karte mit berechneter Route"></div>
+  </section>
+
+  <section class="card">
+    <h2>5. Route berechnen und Navigation öffnen</h2>
+    <label class="check">
+      <input type="checkbox" id="ack">
+      Ich habe verstanden, dass dieser Prototyp keine Gefahrgutroute validiert
+      und ich die Strecke vor Fahrtantritt unabhängig prüfen muss.
+    </label>
+    <button class="primary" id="go">Route berechnen</button>
+    <button class="secondary" id="save">
+      Fahrzeug-/Gefahrgutprofil als Text anzeigen
+    </button>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <button class="secondary" id="openNav" hidden>
+      In ausgewählter Navigations-App öffnen
+    </button>
+  </section>
+
+  <section class="small">
+    Prototyp: Die angezeigte Route ist ein Routenvorschlag und keine Sicherheitsfreigabe.
+    Gefahrgut-, Tunnel- und Fahrzeugbeschränkungen müssen unabhängig geprüft werden.
+  </section>
 </main>
-<footer>Prototyp mit Routingdienst · Adress- und Routenanfragen werden extern verarbeitet</footer><script>
-const $=id=>document.getElementById(id);
-function show(msg){const s=$('status');s.style.display='block';s.textContent=msg}
+
+<footer>
+  Prototyp mit Routingdienst · Adress- und Routenanfragen werden extern verarbeitet
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+
+function show(msg) {
+  const status = $('status');
+  status.style.display = 'block';
+  status.textContent = msg;
+}
+
+// Karte initialisieren, nachdem Leaflet geladen wurde.
+const map = L.map('map').setView([51.1657, 10.4515], 6);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap-Mitwirkende',
+  maxZoom: 19
+}).addTo(map);
+
+let routeLine = null;
+let lastStart = '';
+let lastDestination = '';
 
 $('go').addEventListener('click', async () => {
   const start = $('start').value.trim();
@@ -146,6 +319,9 @@ $('go').addEventListener('click', async () => {
   }
 
   const worker = 'https://adr-route-proxy.jasonstreckenbach5.workers.dev';
+  $('go').disabled = true;
+  $('go').textContent = 'Route wird berechnet …';
+  $('openNav').hidden = true;
 
   try {
     show('Suche Start- und Zieladresse …');
@@ -154,7 +330,17 @@ $('go').addEventListener('click', async () => {
       const response = await fetch(
         worker + '/geocode?text=' + encodeURIComponent(address)
       );
-      const data = await response.json();
+
+      const responseText = await response.text();
+      let data;
+
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        throw new Error(
+          'Die Adresssuche antwortet momentan nicht korrekt. Bitte später erneut versuchen.'
+        );
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'Adresssuche fehlgeschlagen.');
@@ -173,15 +359,16 @@ $('go').addEventListener('click', async () => {
     show('Berechne Route …');
 
     const restrictions = {};
-const readNumber = id => {
-  const value = $(id).value.trim().replace(',', '.');
-  return value === '' ? NaN : Number(value);
-};
 
-const height = readNumber('height');
-const width = readNumber('width');
-const length = readNumber('length');
-const weight = readNumber('weight');
+    const readNumber = id => {
+      const value = $(id).value.trim().replace(',', '.');
+      return value === '' ? NaN : Number(value);
+    };
+
+    const height = readNumber('height');
+    const width = readNumber('width');
+    const length = readNumber('length');
+    const weight = readNumber('weight');
 
     if (Number.isFinite(height) && height > 0) restrictions.height = height;
     if (Number.isFinite(width) && width > 0) restrictions.width = width;
@@ -201,96 +388,108 @@ const weight = readNumber('weight');
       })
     });
 
-const responseText = await response.text();
-let route;
+    const responseText = await response.text();
+    let route;
 
-try {
-  route = JSON.parse(responseText);
-} catch {
-  throw new Error(
-    'Der Routingdienst antwortet momentan nicht korrekt (HTTP ' +
-    response.status + '). Bitte später erneut versuchen.'
-  );
-}
-if (!response.ok) {
-  throw new Error(
-    'HeiGIT HTTP ' + response.status + ': ' +
-    JSON.stringify(route)
-  );
-}
+    try {
+      route = JSON.parse(responseText);
+    } catch {
+      throw new Error(
+        'Der Routingdienst antwortet momentan nicht korrekt (HTTP ' +
+        response.status + '). Bitte später erneut versuchen.'
+      );
+    }
 
-if (!route.features || !route.features.length) {
-  throw new Error(
-    'HeiGIT lieferte keine Route. Antwort: ' +
-    JSON.stringify(route)
-  );
-}
+    if (!response.ok) {
+      throw new Error(
+        'HeiGIT HTTP ' + response.status + ': ' +
+        JSON.stringify(route)
+      );
+    }
 
+    if (!route.features || !route.features.length ||
+        !route.features[0].geometry ||
+        !route.features[0].geometry.coordinates) {
+      throw new Error('Der Routingdienst hat keine gültige Route geliefert.');
+    }
 
-const coordinates = route.features[0].geometry.coordinates;
+    const coordinates = route.features[0].geometry.coordinates;
 
-if (routeLine) {
-  map.removeLayer(routeLine);
-}
+    if (!coordinates.length) {
+      throw new Error('Die Route enthält keine Koordinaten.');
+    }
 
-const latLngs = coordinates.map(point => [point[1], point[0]]);
+    // Vorherige Route entfernen und neue Route auf der Karte zeichnen.
+    if (routeLine) {
+      map.removeLayer(routeLine);
+    }
 
-routeLine = L.polyline(latLngs, {
-  color: '#176b87',
-  weight: 5
-}).addTo(map);
+    const latLngs = coordinates.map(point => [point[1], point[0]]);
 
-map.fitBounds(routeLine.getBounds(), { padding: [20, 20] });
-    const routePoints = coordinates.map(point => point[1] + ',' + point[0]);
+    routeLine = L.polyline(latLngs, {
+      color: '#176b87',
+      weight: 5
+    }).addTo(map);
 
-    const mapsUrl = $('nav').value === 'apple'
-      ? 'https://maps.apple.com/?daddr=' +
-        encodeURIComponent(dest) + '&dirflg=d'
-      : 'https://www.google.com/maps/dir/?api=1&origin=' +
-        encodeURIComponent(start) + '&destination=' +
-        encodeURIComponent(dest) + '&travelmode=driving';
+    map.fitBounds(routeLine.getBounds(), { padding: [20, 20] });
+
+    lastStart = start;
+    lastDestination = dest;
 
     show(
-      'Routenvorschlag berechnet. Die Strecke ist nicht als ADR-konform bestätigt. ' +
-      'Bitte Gefahrgut-, Tunnel- und Fahrzeugbeschränkungen unabhängig prüfen. ' +
-      'Die berechnete Strecke wird als Übersicht geöffnet.'
+      'Route auf der Karte eingezeichnet. Bitte prüfe die Strecke unabhängig. ' +
+      'Diese Berechnung bestätigt keine ADR-Konformität. ' +
+      'Die externe Navigations-App kann eine andere Strecke berechnen.'
     );
 
-    window.open(mapsUrl, '_blank', 'noopener');
+    // Navigation erst nach der Routenberechnung separat öffnen.
+    $('openNav').hidden = false;
+
   } catch (error) {
     show('Fehler: ' + error.message);
+  } finally {
+    $('go').disabled = false;
+    $('go').textContent = 'Route berechnen';
   }
 });
 
-$('save').addEventListener('click',()=>{
- const lines=[
- 'Fahrzeug: '+$('vehicle').value,
- 'Höhe: '+($('height').value||'nicht angegeben')+' m',
- 'Breite: '+($('width').value||'nicht angegeben')+' m',
- 'Länge: '+($('length').value||'nicht angegeben')+' m',
- 'Zulässiges Gesamtgewicht: '+($('weight').value||'nicht angegeben')+' t',
-'UN-Nummer: '+($('un').value||'nicht angegeben'),
-'Tunnelbeschränkungscode: '+($('tunnel').value||'nicht angegeben'),
-'Gefahrgutklasse: '+($('hazardClass').value||'nicht angegeben'),
-'Verpackungsgruppe: '+($('packingGroup').value||'nicht angegeben'),
-'Beförderungskategorie: '+($('transportCategory').value||'nicht angegeben'),
- '',
- 'HINWEIS: Keine ADR- oder Routenprüfung durchgeführt.'
- ];
- show(lines.join('\n'));
+$('openNav').addEventListener('click', () => {
+  if (!lastStart || !lastDestination) {
+    show('Bitte zuerst eine Route berechnen.');
+    return;
+  }
+
+  const mapsUrl = $('nav').value === 'apple'
+    ? 'https://maps.apple.com/?saddr=' +
+      encodeURIComponent(lastStart) +
+      '&daddr=' + encodeURIComponent(lastDestination) +
+      '&dirflg=d'
+    : 'https://www.google.com/maps/dir/?api=1&origin=' +
+      encodeURIComponent(lastStart) +
+      '&destination=' + encodeURIComponent(lastDestination) +
+      '&travelmode=driving';
+
+  window.open(mapsUrl, '_blank', 'noopener');
 });
 
-</script>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-const map = L.map('map').setView([51.1657, 10.4515], 6);
+$('save').addEventListener('click', () => {
+  const lines = [
+    'Fahrzeug: ' + $('vehicle').value,
+    'Höhe: ' + ($('height').value || 'nicht angegeben') + ' m',
+    'Breite: ' + ($('width').value || 'nicht angegeben') + ' m',
+    'Länge: ' + ($('length').value || 'nicht angegeben') + ' m',
+    'Zulässiges Gesamtgewicht: ' + ($('weight').value || 'nicht angegeben') + ' t',
+    'UN-Nummer: ' + ($('un').value || 'nicht angegeben'),
+    'Tunnelbeschränkungscode: ' + ($('tunnel').value || 'nicht angegeben'),
+    'Gefahrgutklasse: ' + ($('hazardClass').value || 'nicht angegeben'),
+    'Verpackungsgruppe: ' + ($('packingGroup').value || 'nicht angegeben'),
+    'Beförderungskategorie: ' + ($('transportCategory').value || 'nicht angegeben'),
+    '',
+    'HINWEIS: Keine ADR- oder Routenprüfung durchgeführt.'
+  ];
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap-Mitwirkende',
-  maxZoom: 19
-}).addTo(map);
-
-let routeLine = null;
+  show(lines.join('\n'));
+});
 </script>
 </body>
 </html>
